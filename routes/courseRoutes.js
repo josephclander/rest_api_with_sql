@@ -18,8 +18,12 @@ router.get(
 router.get(
   '/:id',
   asyncHandler(async (req, res) => {
-    const course = req.params.id;
-    res.json({ message: `Information for course ${course}` });
+    const id = req.params.id;
+    const course = await Course.findOne({
+      where: { id },
+      include: { model: User },
+    });
+    res.json(course);
   })
 );
 
