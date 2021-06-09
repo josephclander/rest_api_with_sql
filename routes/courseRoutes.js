@@ -1,13 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { Course } = require('../models');
+const { Course, User } = require('../models');
 const { asyncHandler } = require('../middleware/async-handler');
 
 // A /api/courses GET route that will return a list of all courses including the User that owns each course and a 200 HTTP status code.
 router.get(
   '/',
   asyncHandler(async (req, res) => {
-    res.json({ message: 'A list of all the courses and the list of students' });
+    const courses = await Course.findAll({
+      include: { model: User },
+    });
+    res.json(courses);
   })
 );
 
