@@ -31,7 +31,13 @@ router.get(
         attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
       },
     });
-    res.json(course);
+    if (course) {
+      res.json(course);
+    } else {
+      res
+        .status(404)
+        .res.json({ message: `Course ${req.params.id} not found.` });
+    }
   })
 );
 
@@ -62,7 +68,7 @@ router.put(
       await course.update(req.body);
       res.status(204).end();
     } else {
-      res.status(404).json({ message: `Quote ${req.params.id} not found.` });
+      res.status(404).json({ message: `Course ${req.params.id} not found.` });
     }
   })
 );
@@ -77,7 +83,7 @@ router.delete(
       await course.destroy();
       res.status(204).end();
     } else {
-      res.status(404).json({ message: `Quote ${req.params.id} not found.` });
+      res.status(404).json({ message: `Course ${req.params.id} not found.` });
     }
   })
 );
