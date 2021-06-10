@@ -47,12 +47,7 @@ router.post(
   asyncHandler(async (req, res) => {
     // create the course
     const newCourse = await Course.create(req.body);
-    // how to get the id of the newly created course?
-    console.log(newCourse.toJSON());
-    // const newCourseId = 2; // hardcoded - must change
-    // how to add foreignKey constraint? - connect current user?
-    res.end();
-    // res.location(`/api/courses/${newCourseId}`).status(201).end();
+    res.location(`/api/courses/${newCourse.id}`).status(201).end();
   })
 );
 
