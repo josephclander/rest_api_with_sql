@@ -47,9 +47,15 @@ router.put(
   '/:id',
   asyncHandler(async (req, res) => {
     // get the course
+    const course = await Course.findByPk(req.params.id);
     // open course info
-    // save course with added info
-    res.status(204).end();
+    if (course) {
+      // save course with added info
+      await course.update(req.body);
+      res.status(204).end();
+    } else {
+      res.status(404).json({ message: `Quote ${req.params.id} not found.` });
+    }
   })
 );
 
