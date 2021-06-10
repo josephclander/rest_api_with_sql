@@ -17,8 +17,11 @@ router.post(
       await User.create(req.body);
       res.location('/').status(201).end();
     } catch (error) {
-      if (error.name === 'SequelizeUniqueConstraintError') {
-        // const errors = error.errors.map((err) => err.message);
+      if (error.name === 'SequelizeValidationError') {
+        const errors = error.errors.map((err) => err.message);
+        res.status(400).json({ errors });
+        // extra credit unique error for email
+      } else if (error.name === 'SequelizeUniqueConstraintError') {
         res.status(400).json({ message: error.message });
       } else {
         throw error;
