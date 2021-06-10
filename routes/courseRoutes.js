@@ -8,7 +8,11 @@ router.get(
   '/',
   asyncHandler(async (req, res) => {
     const courses = await Course.findAll({
-      include: { model: User },
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      include: {
+        model: User,
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+      },
     });
     res.json(courses);
   })
@@ -21,7 +25,11 @@ router.get(
     const id = req.params.id;
     const course = await Course.findOne({
       where: { id },
-      include: { model: User },
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      include: {
+        model: User,
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+      },
     });
     res.json(course);
   })
