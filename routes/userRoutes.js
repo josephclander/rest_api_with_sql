@@ -17,7 +17,12 @@ router.post(
       await User.create(req.body);
       res.location('/').status(201).end();
     } catch (error) {
-      throw error;
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        // const errors = error.errors.map((err) => err.message);
+        res.status(400).json({ message: error.message });
+      } else {
+        throw error;
+      }
     }
   })
 );
