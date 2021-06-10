@@ -63,9 +63,14 @@ router.put(
 router.delete(
   '/:id',
   asyncHandler(async (req, res) => {
-    const course = req.params.id;
-    // delete the selected course
-    res.status(204).end();
+    const course = await Course.findByPk(req.params.id);
+    if (course) {
+      // delete the selected course
+      await course.destroy();
+      res.status(204).end();
+    } else {
+      res.status(404).json({ message: `Quote ${req.params.id} not found.` });
+    }
   })
 );
 
