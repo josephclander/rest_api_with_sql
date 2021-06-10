@@ -45,9 +45,18 @@ router.get(
 router.post(
   '/',
   asyncHandler(async (req, res) => {
-    // create the course
-    const newCourse = await Course.create(req.body);
-    res.location(`/api/courses/${newCourse.id}`).status(201).end();
+    try {
+      // create the course
+      const newCourse = await Course.create(req.body);
+      res.location(`/api/courses/${newCourse.id}`).status(201).end();
+    } catch (error) {
+      if (error.name === 'SequelizeValidationError') {
+        const errors = error.errors.map((err) => err.message);
+        res.status(400).json({ errors });
+      } else {
+        throw error;
+      }
+    }
   })
 );
 
