@@ -2,11 +2,18 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../models');
 const { asyncHandler } = require('../middleware/async-handler');
+const { authenticateUser } = require('../middleware/auth-user');
 
 router.get(
   '/',
+  authenticateUser,
   asyncHandler(async (req, res) => {
-    res.json({ message: 'This is the currently authenticated user' });
+    // find the currentUser again so we can filter the password
+    const user = await User.findOne({
+      where: { emailAddress: req.currentUser.emailAddress },
+      attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+    });
+    res.json(user);
   })
 );
 
